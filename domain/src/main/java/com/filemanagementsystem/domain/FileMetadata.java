@@ -1,13 +1,14 @@
 package com.filemanagementsystem.domain;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.apache.commons.io.FilenameUtils;
 
+import java.io.File;
 import java.io.Serializable;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 
 @Entity
 @Getter
@@ -15,14 +16,15 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @Table(name = "FILEMETADATA")
+@AllArgsConstructor
 public class FileMetadata implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)  // Auto-increment for ID
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "path")  // Enforce unique path
+    @Column(name = "path")
     private String path;
 
     @Column(name = "filename")
@@ -40,12 +42,13 @@ public class FileMetadata implements Serializable {
     @Column(name = "lastScannedDate")
     private LocalDate lastScannedDate;
 
-    public FileMetadata(String path, String filename, String extension, Long size, LocalDate createdDate, LocalDate lastScannedDate) {
-        this.path = path;
-        this.filename = filename;
-        this.extension = extension;
-        this.size = size;
-        this.createdDate = createdDate;
-        this.lastScannedDate = lastScannedDate;
+    public FileMetadata(File file) {
+        long lastModifiedMillis = file.lastModified();
+        this.path = file.getAbsolutePath();
+        this.filename = file.getName();
+        this.extension = FilenameUtils.getExtension(path);
+        this.size = file.length();
+        this.createdDate = LocalDate.now();
+        this.lastScannedDate = Instant.ofEpochMilli(lastModifiedMillis).atZone(ZoneId.systemDefault()).toLocalDate();
     }
 }
