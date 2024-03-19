@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @Setter
 @Data
 @NoArgsConstructor
-@Table(name = "FileMetadata")
+@Table(name = "FILEMETADATA")
 public class FileMetadata implements Serializable {
 
     @Id

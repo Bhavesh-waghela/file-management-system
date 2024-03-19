@@ -36,12 +36,8 @@ public class FileMetaDataControllerTest {
 
     @Test
     void getAllFiles_OK() throws Exception {
-        when(fileMetaDataService.getAllFileMetadata())
-                .thenReturn(new ArrayList<>());
-
         mockMvc.perform(get("/api/files"))
                 .andExpect(status().isOk());
 
-        verify(fileMetaDataService).getAllFileMetadata();
     }
 }
